@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment Classification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">English Comment Classification</h2>
+        <form id="commentForm">
+            <div class="form-group">
+                <label for="text">Enter Comment:</label>
+                <textarea class="form-control" id="text" name="text" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+        <div id="predictionResult" class="alert alert-info mt-4" style="display:none;"></div>
+    </div>
+
+    <script>
+        $('#commentForm').on('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+            const text = $('#text').val();
+            
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ text: text }),
+                success: function(response) {
+                    $('#predictionResult').text('Prediction: ' + response.label).show();
+                },
+                error: function() {
+                    $('#predictionResult').text('Error: Could not get prediction.').show();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
